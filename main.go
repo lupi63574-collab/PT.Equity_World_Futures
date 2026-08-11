@@ -1,21 +1,27 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
+	"path/filepath"
 )
 
+func homeHandler(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/" {
+		http.NotFound(w, r)
+		return
+	}
+
+	// Langsung menyajikan file index.html dari folder view
+	tmplPath := filepath.Join("view", "index.html")
+	http.ServeFile(w, r, tmplPath)
+}
+
 func main() {
-	// Menentukan handler untuk URL rute utama ("/")
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		// WriteString mengirimkan teks langsung ke browser
-		fmt.Fprintln(w, "Hello, World!")
-	})
+	// Routing ke halaman utama
+	http.HandleFunc("/", homeHandler)
 
 	log.Println("Server running on http://localhost:8080")
-	
-	// Jalankan server
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		log.Fatalf("Gagal menjalankan server: %v", err)

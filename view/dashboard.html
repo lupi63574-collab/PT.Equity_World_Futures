@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard Admin</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; }
+    .btn-logout { padding: 8px 16px; background: #dc2626; color: white; text-decoration: none; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h1>Selamat Datang di Dashboard, {{.Username}}!</h1>
+  <p>Anda berhasil login ke area admin.</p>
+  <br>
+  <a href="/logout" class="btn-logout">Logout</a>
+</body>
+</html>

@@ -44,6 +44,38 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, tmplPath)
 }
 
+// --- Handler Tambahan untuk Admin ---
+
+// Menampilkan halaman login (view/login.html)
+func loginHandler(w http.ResponseWriter, r *http.Request) {
+	tmplPath := filepath.Join("view", "login.html")
+	http.ServeFile(w, r, tmplPath)
+}
+
+// Memproses autentikasi form login
+func loginProcessHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+
+	username := r.FormValue("username")
+	password := r.FormValue("password")
+
+	// Validasi admin sederhana
+	if username == "admin" && password == "admin123" {
+		http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
+	} else {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+	}
+}
+
+// Menampilkan halaman dashboard (view/dashboard.html)
+func dashboardHandler(w http.ResponseWriter, r *http.Request) {
+	tmplPath := filepath.Join("view", "dashboard.html")
+	http.ServeFile(w, r, tmplPath)
+}
+
 func main() {
 
 	// Hubungkan ke database
@@ -55,6 +87,11 @@ func main() {
 	// Routing
 	http.HandleFunc("/", homeHandler)
 	http.HandleFunc("/nasabah", handler.GetNasabahHandler(db)) // Menghubungkan route /nasabah ke handler nasabah
+
+	// Routing Admin Tambahan
+	http.HandleFunc("/login", loginHandler)
+	http.HandleFunc("/admin/login-process", loginProcessHandler)
+	http.HandleFunc("/dashboard", dashboardHandler)
 
 	log.Println("Server running on http://localhost:8080")
 
